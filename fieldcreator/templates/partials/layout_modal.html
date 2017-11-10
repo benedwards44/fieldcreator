@@ -1,0 +1,63 @@
+<div class="modal fade" id="layoutModal" tabindex="-1" role="dialog" aria-labelledby="layoutModalLabel" aria-hidden="true">
+	
+    {% verbatim %}
+
+    <div class="modal-dialog">
+
+    	<div class="modal-content">
+
+      		<div class="modal-header">
+      			<button type="button" class="close" data-dismiss="modal">
+      				<span aria-hidden="true">&times;</span>
+      				<span class="sr-only">Close</span>
+      			</button>
+      			<h4 class="modal-title">Edit Layouts</h4>
+      		</div>
+
+      		<div class="modal-body">
+
+      			<table class="table table-hover" id="page_layout_table">
+
+      				<thead>
+
+	      				<tr>
+	      					<th width="100px">
+	      						<input type="checkbox" checked="checked" ng-click="layoutCheckAll" ng-model="layouts_checkall" />&nbsp;Add Field
+	      					</th>
+	      					<th>
+	      						Page Layout Name
+	      					</th>
+	      				</tr>
+
+	      			</thead>
+
+	      			<tbody>
+
+                        <tr ng-repeat="layout in layouts">
+
+                            <td>
+                                <input type="checkbox" ng-model="layout.checked" /> 
+                            </td>
+                            <td>{{ layout.name }}</td>
+
+                        </tr>
+
+                    </tbody>
+
+      			</table>
+      			
+      		</div>
+
+      		<div class="modal-footer">
+                <button type="button" class="btn btn-md" data-dismiss="modal">Cancel</button>
+      			<button type="button" class="btn btn-md" data-dismiss="modal">Apply To All Fields</button>
+                <button type="button" class="btn btn-md" data-dismiss="modal">Apply To This Field</button>
+      		</div>
+
+    	</div>
+
+  	</div>
+
+    {% endverbatim %}
+
+</div>

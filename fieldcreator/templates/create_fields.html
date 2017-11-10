@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<div class="{% if request.GET.noheader == '1' %}col-md-12{% else %}col-md-8 col-md-offset-2{% endif %}">
+	
+		<h1>Salesforce Field Creator</h1>
+
+		<div ng-app="createFieldsApp">
+
+			<div ng-controller="CreateFieldsController" ng-init="init('{{ job.random_id }}')">
+
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="object_select">Select Object</label>
+						<select class="form-control" id="object_select" style="width:400px;" ng-model="objectName" ng-change="objectChange()">
+					        <option value="">Select object to create fields for....</option>
+					        {% for object in job.sorted_objects %}
+					        	<option value="{{ object.name }}">{{ object.name }} ({{ object.label }})</option>
+					        {% endfor %}
+					    </select>
+					</div>
+				</div>
+
+				<div class="col-md-6 text-right" style="padding-top:25px;">
+					<form action="." method="post">
+						{% csrf_token %}
+						<button class="btn btn-danger" type="submit">Refresh Objects and Profiles</button>
+					</form>
+				</div>
+
+			    <hr />
+
+			    <div class="col-md-12">
+
+				    <div class="alert alert-info" role="alert" id="fields_table_info">
+				    	Select an object to start creating fields.
+				    </div>
+
+				    <div class="col-xs-12 text-center" id="deploy">
+				    	<button class="btn btn-large" ng-click="clearAll()">Clear All</button>
+				    	<button class="btn btn-large" ng-click="deploy()">Deploy Fields</button>
+				    	<hr />
+				    </div>
+
+				    {% verbatim %}
+
+				    <table class="table table-hover" id="fields_table">
+
+				    	<thead>
+				    		<tr>
+				    			<th width="1%"></th>
+					    		<th>Label</th>
+					    		<th>Name</th>
+					    		<th>Type</th>
+					    		<th width="75">Options</th>
+					    		<!-- Commenting out layouts for now
+					    		<th width="75">Layouts</th>
+					    		-->
+					    		<th width="75">Profiles</th>
+					    	</tr>
+				    	</thead>
+
+				    	<tbody>
+
+				    		<tr ng-repeat="field in fields">
+
+				    			<td class="text-center" style="vertical-align:middle;">
+				    				<img src="/static/images/bin.png" ng-click="removeRow($index)" style="cursor:pointer;" />
+				    			</td>
+
+					    		<td>
+					    			<input type="text" class="form-control" placeholder="Field label..." ng-model="field.label" ng-blur="labelChange(field)" />
+
+					    		</td>
+
+					    		<td>
+					    			<input type="text" class="form-control" placeholder="Field name..." ng-model="field.name" />
+					    		</td>
+
+					    		<td>
+					    			<select class="form-control" ng-model="field.type" ng-change="typeChange(field)">
+					    				<option value="Checkbox">Checkbox</option>
+					    				<option value="Currency">Currency</option>
+					    				<option value="Date">Date</option>
+					    				<option value="DateTime">Date / Time</option>
+					    				<option value="Email">Email</option>
+					    				<option value="Location">Geolocation</option>
+					    				<option value="Number">Number</option>
+					    				<option value="Percent">Percent</option>
+					    				<option value="Phone">Phone</option>
+					    				<option value="Picklist">Picklist</option>
+					    				<option value="MultiselectPicklist">Picklist (Multi-Select)</option>
+					    				<option value="Text">Text</option>
+					    				<option value="TextArea">Text Area</option>
+					    				<option value="LongTextArea">Text Area (Long)</option>
+					    				<option value="Html">Text Area (Rich)</option>
+					    				<!--
+					    				<option value="EncryptedText">Text (Encrypted)</option>
+					    				-->
+					    				<option value="Url">URL</option>
+					    			</select>
+					    		</td>
+					    		<td>
+					    			<button class="btn btn-sm" ng-click="editRow(field)">Edit</button>
+					    		</td>
+					    		<!-- Commenting out layouts for now
+					    		<td>
+					    			<button class="btn btn-sm" onclick="$('#layoutModal').modal();">Edit</button>
+					    		</td>
+					    		-->
+					    		<td>
+					    			<button class="btn btn-sm" ng-click="editProfiles(field)">Edit</button>
+					    		</td>
+
+					    	</tr>
+
+				    	</tbody>
+
+				    </table>
+
+				    <button class="btn btn-sm" id="add_row" ng-click="addRow()">Add Row</button>
+
+				</div>
+
+			    {% endverbatim %}
+
+			    {% include 'partials/progress_modal.html' %}
+
+			    {% include 'partials/field_options_modal.html' %}
+
+				{% include 'partials/layout_modal.html' %}
+
+				{% include 'partials/profile_modal.html' %}
+
+				{% include 'partials/deployment_modal.html' %}
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+	<!-- Cookie scipt for AJAX posts to controller -->
+	<script src="/static/js/cookie.js"></script>
+
+	<!-- Angular scripts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-resource.min.js"></script>
+
+	<!-- Angular controller -->
+	<script src="/static/js/controller.js"></script>
+	
+{% endblock %}

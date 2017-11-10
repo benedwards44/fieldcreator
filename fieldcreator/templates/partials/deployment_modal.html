@@ -1,0 +1,57 @@
+<div class="modal fade" id="deployModal" tabindex="-1" role="dialog" aria-labelledby="deployModalLabel" aria-hidden="true">
+
+	{% verbatim %}
+
+	<div class="modal-dialog">
+
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<h4 class="modal-title">Deploying fields...</h4>
+			</div>
+
+			<div class="modal-body">
+
+				<div class="alert alert-info" role="alert">
+					Note: Profiles are deployed silently after the fields have been deployed. This can take a few minutes to reflect in your Org. It pays to check the profile settings after your deployment.
+				</div>
+
+				<table class="table table-hover">
+
+					<thead>
+
+						<tr>
+							<th width="20%">Field Label</th>
+							<th width="20%">Field Name</th>
+							<th width="40%">Status</th>
+						</tr>
+
+					</thead>
+
+					<tbody>
+
+						<tr ng-repeat="field in fields">
+							<td style="vertical-align:middle;">{{ field.label }}</td>
+							<td style="vertical-align:middle;">{{ field.name }}</td>
+							<td>
+								<div class="alert alert-{{ field.deployStatus }}" role="alert" style="margin:0;">
+									{{ field.deployMessage }}
+								</div>
+							</td>
+						</tr>
+
+					</tbody>
+
+				</table>
+
+			</div>
+
+			<div class="modal-footer"></div>
+
+		</div>
+
+	</div>
+
+	{% endverbatim %}
+
+</div>

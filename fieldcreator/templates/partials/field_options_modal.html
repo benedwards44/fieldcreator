@@ -1,0 +1,620 @@
+<div class="modal fade" id="fieldOptionModal" tabindex="-1" role="dialog" aria-labelledby="fieldOptionModalLabel" aria-hidden="true">
+
+	<div class="modal-dialog">
+
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">Set Field Options</h4>
+			</div>
+
+			<div class="modal-body">
+
+				<div class="field_options Checkbox_options">
+
+					<div class="form-group">
+						<label style="margin-bottom: 0px;">Default Value</label>
+	      				<div class="radio" style="margin-top: 0px;">
+	      					<label>
+	      						<input type="radio" name="checkboxDefaultRadio" id="checkboxChecked" value="checked" ng-model="checkboxdefault" /> Checked
+	      					</label>
+	      				</div>
+	      				<div class="radio">
+	      					<label>
+	      						<input type="radio" name="checkboxDefaultRadio" id="checkboxUnchecked" value="unchecked" ng-model="checkboxdefault"/> Unchecked
+	      					</label>
+	      				</div>
+	      			</div>
+
+					<div class="form-group">
+						<label for="checkboxDescription">Description</label>
+						<textarea id="checkboxDescription" class="form-control" rows="3" class="description_value" ng-model="description"></textarea>
+					</div>
+
+					<div class="form-group">
+						<label for="checkboxHelpText">Help Text</label>
+						<textarea id="checkboxHelpText" class="form-control" rows="3" class="helptext_value" ng-model="helptext"></textarea>
+					</div>
+
+				</div>
+
+				<div class="field_options Currency_options">
+
+				    <div class="form-group">
+				        <label for="currencyLength">Length</label>
+				        <input type="text" id="currencyLength" class="form-control" placeholder="Max is 18 less Decimal Places" ng-model="precision" />
+				    </div>
+
+				    <div class="form-group">
+				        <label for="currencyDecimalPlaces">Decimal Places</label>
+				        <input type="text" id="currencyDecimalPlaces" class="form-control" value="2" placeholder="Max is 18 less Length" ng-model="decimal" />
+				    </div>
+
+				    <div class="form-group">
+				        <label for="currencyDescription">Description</label>
+				        <textarea id="currencyDescription" class="form-control" rows="3" ng-model="description" ></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="currencyHelpText">Help Text</label>
+				        <textarea id="currencyHelpText" class="form-control" rows="3" ng-model="helptext" ></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="currencyRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="currencyDefaultValue">Default Value</label>
+				        <textarea id="currencyDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+				<div class="field_options Date_options">
+
+				    <div class="form-group">
+				        <label for="dateDescription">Description</label>
+				        <textarea id="dateDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="dateHelpText">Help Text</label>
+				        <textarea id="dateHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="dateRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="dateDefaultValue">Default Value</label>
+				        <textarea id="dateDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+				<div class="field_options DateTime_options">
+
+	                <div class="form-group">
+	                    <label for="datetimeDescription">Description</label>
+	                    <textarea id="datetimeDescription" class="form-control" rows="3" ng-model="description"></textarea>
+	                </div>
+
+	                <div class="form-group">
+	                    <label for="datetimeHelpText">Help Text</label>
+	                    <textarea id="datetimeHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+	                </div>
+
+	                <div class="checkbox">
+	                    <label>
+	                        <input type="checkbox" id="datetimeRequired" ng-model="required" /> <strong>Required</strong>
+	                    </label>
+	                </div>
+
+	                <!-- Commenting out Default Value for now - causing quite a few issues
+	                <div class="form-group">
+	                    <label for="datetimeDefaultValue">Default Value</label>
+	                    <textarea id="datetimeDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+	                </div>
+	                -->
+
+				</div>
+
+				<div class="field_options Email_options">
+
+				    <div class="form-group">
+						<label for="emailDescription">Description</label>
+						<textarea id="emailDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="emailHelpText">Help Text</label>
+				        <textarea id="emailHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="emailRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="emailUnique" ng-model="uniqueSetting" /> <strong>Unique</strong>
+				        </label>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="emailExternalId" ng-model="external" /> <strong>External ID</strong>
+				        </label>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="emailDefaultValue">Default Value</label>
+				        <textarea id="emailDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+				<div class="field_options Location_options">
+
+					<div class="form-group">
+						<label style="margin-bottom: 0px;">Latitude and Longitude Display Notation</label>
+	      				<div class="radio" style="margin-top: 0px;">
+	      					<label>
+	      						<input type="radio" name="geolocationDisplay" id="geoLocationDegrees" value="degrees" ng-model="geodisplay" /> Degrees, Minutes, Seconds
+	      					</label>
+	      				</div>
+	      				<div class="radio">
+	      					<label>
+	      						<input type="radio" name="geolocationDisplay" id="geoLocationDecimal" value="decimal" ng-model="geodisplay" /> Decimal
+	      					</label>
+	      				</div>
+	      			</div>
+
+	      			<div class="form-group">
+				        <label for="geolocationDecimalPlaces">Decimal Places</label>
+				        <input type="text" id="geolocationDecimalPlaces" class="form-control" value="2" ng-model="decimal" />
+				    </div>
+
+				    <div class="form-group">
+						<label for="geolocationDescription">Description</label>
+						<textarea id="geolocationDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="geolocationHelpText">Help Text</label>
+				        <textarea id="geolocationHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="geolocationRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				</div>
+
+	                      
+				<div class="field_options Number_options">
+
+					<div class="form-group">
+				        <label for="numberLength">Length</label>
+				        <input type="text" id="numberLength" class="form-control" placeholder="Max is 18 less Decimal Places" ng-model="precision" />
+				    </div>
+
+				    <div class="form-group">
+				        <label for="numberDecimalPlaces">Decimal Places</label>
+				        <input type="text" id="numberDecimalPlaces" class="form-control" value="0" placeholder="Max is 18 less Length" ng-model="decimal" />
+				    </div>
+
+				    <div class="form-group">
+				        <label for="numberDescription">Description</label>
+				        <textarea id="numberDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="numberHelpText">Help Text</label>
+				        <textarea id="numberHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="numberRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="numberUnique" ng-model="uniqueSetting" /> <strong>Unique</strong>
+				        </label>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="numberExternalId" ng-model="external" /> <strong>External ID</strong>
+				        </label>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="numberDefaultValue">Default Value</label>
+				        <textarea id="numberDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+				<div class="field_options Percent_options">
+
+					<div class="form-group">
+				        <label for="percentLength">Length</label>
+				        <input type="text" id="percentLength" class="form-control" placeholder="Max is 18 less Decimal Places" ng-model="precision" />
+				    </div>
+
+				    <div class="form-group">
+				        <label for="percentDecimalPlaces">Decimal Places</label>
+				        <input type="text" id="percentDecimalPlaces" class="form-control" value="2" placeholder="Max is 18 less Length" ng-model="decimal" />
+				    </div>
+
+				    <div class="form-group">
+				        <label for="percentDescription">Description</label>
+				        <textarea id="percentDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="percentHelpText">Help Text</label>
+				        <textarea id="percentHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="percentRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="percentDefaultValue">Default Value</label>
+				        <textarea id="percentDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+				<div class="field_options Phone_options">
+
+				    <div class="form-group">
+						<label for="phoneDescription">Description</label>
+						<textarea id="phoneDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="phoneHelpText">Help Text</label>
+				        <textarea id="phoneHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="phoneRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="phoneDefaultValue">Default Value</label>
+				        <textarea id="phoneDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+				<div class="field_options Picklist_options">
+
+					<div class="form-group">
+						<label for="picklistOptions">Picklist Values</label>
+						<textarea id="picklistOptions" class="form-control" rows="5" placeholder="Enter picklist values seperated by line breaks." ng-model="picklistvalues"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="picklistSortAlpha" ng-model="sortalpha" /> <strong>Sort values alphabetically</strong>
+				        </label>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="picklistFirstValueDefault" ng-model="firstvaluedefault" /> <strong>Use first value as default</strong>
+				        </label>
+				    </div>
+
+				    <div class="form-group">
+						<label for="picklistDescription">Description</label>
+						<textarea id="picklistDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="picklistHelpText">Help Text</label>
+				        <textarea id="picklistHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+
+				</div>
+
+				<div class="field_options MultiselectPicklist_options">
+
+					<div class="form-group">
+						<label for="picklist-multiOptions">Picklist Values</label>
+						<textarea id="picklist-multiOptions" class="form-control" rows="5" placeholder="Enter picklist values seperated by line breaks." ng-model="picklistvalues"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="picklist-multiSortAlpha" ng-model="sortalpha" /> <strong>Sort values alphabetically</strong>
+				        </label>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="picklist-multiFirstValueDefault" ng-models="firstvaluedefault" /> <strong>Use first value as default</strong>
+				        </label>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="picklist-multiVisibleLines"># Visible Lines</label>
+				        <input type="text" id="picklist-multiVisibleLines" class="form-control" value="4" placeholder="This field is required." ng-model="vislines" />
+				    </div>
+
+				    <div class="form-group">
+						<label for="picklist-multiDescription">Description</label>
+						<textarea id="picklist-multiDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="picklist-multiHelpText">Help Text</label>
+				        <textarea id="picklist-multiHelpText" class="form-control" rows="3" ng-model="helptext" ng-model="helptext"></textarea>
+				    </div>
+
+				</div>
+
+				<div class="field_options Text_options">
+
+					<div class="form-group">
+				        <label for="textLength">Length</label>
+				        <input type="text" id="textLength" class="form-control" placeholder="Max is 255 characters." ng-model="length" />
+				    </div>
+
+					<div class="form-group">
+						<label for="textDescription">Description</label>
+						<textarea id="textDescription" class="form-control" rows="3" ng-model="description" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="textHelpText">Help Text</label>
+				        <textarea id="textHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="textRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="textUnique" onchange="enableUniqueOptions($(this));" ng-model="uniqueSetting" /> <strong>Unique</strong>
+				        </label>
+				    </div>
+
+				    <div class="form-group" style="padding-left:20px;">
+
+					    <div class="radio">
+	      					<label>
+	      						<input type="radio" name="checkboxdefaultRadio" id="checkboxChecked" value="insensitive" ng-model="uniquetype" ng-disabled="!uniqueSetting"  /> Case insensitive (treat "ABC" and "abc" as duplicate values)
+	      					</label>
+	      				</div>
+	      				<div class="radio">
+	      					<label>
+	      						<input type="radio" name="checkboxdefaultRadio" id="checkboxUnchecked" value="sensitive" ng-model="uniquetype" ng-disabled="!uniqueSetting" /> Case sensitive (Treat "ABC" and "abc" as different values)
+	      					</label>
+	      				</div>
+
+					</div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="textExternalId" ng-model="external" /> <strong>External ID</strong>
+				        </label>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="textDefaultValue">Default Value</label>
+				        <textarea id="textDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+				<div class="field_options TextArea_options">
+
+					<div class="form-group">
+				        <label for="text-areaDescription">Description</label>
+				        <textarea id="text-areaDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="text-areaHelpText">Help Text</label>
+				        <textarea id="text-areaHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="text-areaRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="text-areaDefaultValue">Default Value</label>
+				        <textarea id="text-areaDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+				<div class="field_options LongTextArea_options">
+
+					<div class="form-group">
+				        <label for="text-area-long">Length</label>
+				        <input type="text" id="text-area-long" class="form-control" value="131072" placeholder="Max is 131,072 characters." ng-model="length" />
+				    </div>
+
+					<div class="form-group">
+				        <label for="text-area-longVisibleLines"># Visible Lines</label>
+				        <input type="text" id="text-area-longVisibleLines" class="form-control" value="4" placeholder="This field is required." ng-model="vislines" />
+				    </div>
+
+					<div class="form-group">
+				        <label for="text-area-longDescription">Description</label>
+				        <textarea id="text-area-longDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="text-area-longHelpText">Help Text</label>
+				        <textarea id="text-area-longHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="text-area-longDefaultValue">Default Value</label>
+				        <textarea id="text-area-longDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+				<div class="field_options Html_options">
+
+					<div class="form-group">
+				        <label for="text-area-richLength">Length</label>
+				        <input type="text" id="text-area-richLength" class="form-control" value="131072" placeholder="Max is 131,072 characters." ng-model="length" />
+				    </div>
+
+					<div class="form-group">
+				        <label for="text-area-richVisibleLines"># Visible Lines</label>
+				        <input type="text" id="text-area-richVisibleLines" class="form-control" value="4" placeholder="This field is required." ng-model="vislines" />
+				    </div>
+
+				    <div class="form-group">
+				        <label for="text-area-richDescription">Description</label>
+				        <textarea id="text-area-richDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="text-area-richHelpText">Help Text</label>
+				        <textarea id="text-area-richHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				</div>
+
+				<div class="field_options EncryptedText_options">
+
+					<div class="form-group">
+				        <label for="text-area-encryptedLength">Length</label>
+				        <input type="text" id="text-area-encryptedLength" class="form-control" value="255" placeholder="Max is 255 characters." ng-model="length" />
+				    </div>
+
+				    <div class="form-group">
+				        <label for="text-area-encryptedDescription">Description</label>
+				        <textarea id="text-area-encryptedDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="text-area-encryptedHelpText">Help Text</label>
+				        <textarea id="text-area-encryptedHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="text-area-encryptedRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="text-area-encryptedMastType">Mask Type</label>
+				        <select id="text-area-encryptedMastType" class="form-control" ng-model="masktype">
+				        	<option value="all">Mask All Characters</option>
+				        	<option value="lastFour">Last Four Characters Clear</option>
+							<option value="creditCard">Credit Card Number</option>
+							<option value="nino">National Insurance Number</option>
+							<option value="ssn">Social Security Number</option>
+							<option value="sin">Social Insurance Number</option>
+				        </select>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="text-area-encryptedMaskCharacter">Mask Character</label>
+				        <select id="text-area-encryptedMaskCharacter" class="form-control" ng-model="maskchar">
+				        	<option value="asterisk">*</option>
+							<option value="X">X</option>
+				        </select>
+				    </div>
+
+				</div>
+
+				<div class="field_options Url_options">
+
+					<div class="form-group">
+				        <label for="urlDescription">Description</label>
+				        <textarea id="urlDescription" class="form-control" rows="3" ng-model="description"></textarea>
+				    </div>
+
+				    <div class="form-group">
+				        <label for="urlHelpText">Help Text</label>
+				        <textarea id="urlHelpText" class="form-control" rows="3" ng-model="helptext"></textarea>
+				    </div>
+
+				    <div class="checkbox">
+				        <label>
+				            <input type="checkbox" id="urlRequired" ng-model="required" /> <strong>Required</strong>
+				        </label>
+				    </div>
+
+				    <!-- Commenting out Default Value for now - causing quite a few issues
+				    <div class="form-group">
+				        <label for="urlDefaultValue">Default Value</label>
+				        <textarea id="urlDefaultValue" rows="3" class="form-control" placeholder="Use formula syntax." ng-model="default"></textarea>
+				    </div>
+				    -->
+
+				</div>
+
+			</div>
+
+			<div class="modal-footer">
+				<button class="btn btn-md" data-dismiss="modal">Cancel</button>
+				<button class="btn btn-md" data-dismiss="modal" ng-click="saveRow()">Save</button>
+			</div>
+
+    	</div>
+
+ 	</div>
+
+</div>
