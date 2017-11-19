@@ -366,35 +366,52 @@ def deploy_field(request, job_id, object_name):
 			metadata_client.set_options(location=metadata_url, soapheaders=session_header)
 
 			# Build the field metadata
-			field_metadata = build_metadata_for_field(field_data, metadata_client=metadata_client)
-			field_metadata.fullName = object_name + '.' + field_data.get('Name')
-
-			# Deploy the field
 			try:
+			
+				field_metadata = build_metadata_for_field(field_data, metadata_client=metadata_client)
+				field_metadata.fullName = object_name + '.' + field_data.get('Name')
 
-				result = metadata_client.service.createMetadata([field_metadata])
+				# Deploy the field
+				try:
 
-				if result[0].success:
+					result = metadata_client.service.createMetadata([field_metadata])
 
-					page_response = {
-						'success': True,
-						'errorCode': None,
-						'message': 'Successfully created field.'
-					}
+					if result[0].success:
 
-				else:
+						page_response = {
+							'success': True,
+							'errorCode': None,
+							'message': 'Successfully created field.'
+						}
+
+					else:
+
+						page_response = {
+							'success': False,
+							'errorCode': result[0].errors[0].statusCode,
+							'message': result[0].errors[0].message
+						}
+
+					# Return the POST response
+					return HttpResponse(
+						json.dumps(page_response), 
+						content_type = 'application/json'
+					)
+
+				except Exception as ex:
 
 					page_response = {
 						'success': False,
-						'errorCode': result[0].errors[0].statusCode,
-						'message': result[0].errors[0].message
+						'errorCode': 'Error building field metadata',
+						'message': ex
 					}
 
-				# Return the POST response
-				return HttpResponse(
-					json.dumps(page_response), 
-					content_type = 'application/json'
-				)
+					create_error_log('Data Payload Debug', traceback.format_exc())
+
+					return HttpResponse(
+						json.dumps(page_response), 
+						content_type = 'application/json'
+					)
 
 			except Exception as ex:
 
