@@ -4,6 +4,7 @@ class Job(models.Model):
 	random_id = models.CharField(db_index=True, max_length=255, blank=True, null=True)
 	created_date = models.DateTimeField(null=True, blank=True)
 	finished_date = models.DateTimeField(null=True, blank=True)
+	environment = models.CharField(max_length=20, null=True, blank=True)
 	org_id = models.CharField(max_length=255)
 	org_name = models.CharField(max_length=255, blank=True, null=True)
 	email = models.CharField(max_length=255, blank=True, null=True)

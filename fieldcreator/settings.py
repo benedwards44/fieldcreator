@@ -8,7 +8,7 @@ PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ.get('SECRET_KEY', 'ABC123')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -89,15 +89,15 @@ STATICFILES_DIRS = (
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-SALESFORCE_CONSUMER_KEY = os.environ['SALESFORCE_CONSUMER_KEY']
-SALESFORCE_CONSUMER_SECRET = os.environ['SALESFORCE_CONSUMER_SECRET']
+SALESFORCE_CONSUMER_KEY = os.environ.get('SALESFORCE_CONSUMER_KEY')
+SALESFORCE_CONSUMER_SECRET = os.environ.get('SALESFORCE_CONSUMER_SECRET')
 SALESFORCE_REDIRECT_URI = 'https://fieldcreator.herokuapp.com/oauth_response'
-SALESFORCE_API_VERSION = int(os.environ['SALESFORCE_API_VERSION'])
+SALESFORCE_API_VERSION = int(os.environ.get('SALESFORCE_API_VERSION', 38))
 
 # EMAIL SERVER SETTINGS
-EMAIL_HOST = os.environ['EMAIL_HOST']
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

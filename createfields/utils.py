@@ -2,14 +2,25 @@
 	Utility class for various methods
 """
 from createfields.models import ErrorLog
+from suds.client import Client
 import traceback
 import datetime
 
 
-def build_metadata_for_field(field_data):
+def build_metadata_for_field(field_data, metadata_client=None):
 	"""
 		Build the metadata array for deploying a field. Different field types
 		require a different Metadata array to be constructed
+	"""
+	if not metadata_client:
+		return build_metadata_for_field_tooling(field_data)
+	else:
+		return build_metadata_for_field_metadata(field_data, metadata_client)
+
+
+def build_metadata_for_field_tooling(field_data):
+	"""
+	Build the field metadata for the tooling API
 	"""
 
 	field_type = field_data['type']
@@ -19,7 +30,7 @@ def build_metadata_for_field(field_data):
 		'inlineHelpText': field_data['helptext'],
         'description': field_data['description'],
         'label': field_data['label'],
-        'type': field_data['type']
+        'type': field_type
 	}
 
 	# Conditionally add to metadata based on field type
@@ -105,8 +116,27 @@ def build_metadata_for_field(field_data):
 		metadata['maskChar'] = field_data['maskchar']
 		metadata['maskType'] = field_data['masktype']
 
-
 	return metadata
+
+
+def build_metadata_for_field_metadata(field_data, metadata_client):
+	"""
+	Build the field metadata for the Metadata API
+	"""
+
+	new_field = metadata_client.factory.create("CustomField")
+
+	# Set field values
+	new_field.inlineHelpText = field_data.get('helptext')
+	new_field.description = field_data.get('description')
+	new_field.label = field_data.get('label')
+	new_field.type = field_data.get('type')
+
+	# Set defaults
+	new_field.deleteConstraint = 'SetNull'
+	new_field.fieldManageability = None
+
+	return new_field
 
 
 def build_picklist_values(field_data):

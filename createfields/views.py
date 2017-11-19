@@ -143,6 +143,7 @@ def oauth_response(request):
 				job.status = 'Not Started'
 				job.username = username
 				job.email = email
+				job.environment = environment
 				job.org_id = org_id
 				job.org_name = org_name
 				job.instance_url = instance_url
@@ -352,66 +353,84 @@ def deploy_field(request, job_id, object_name):
 		page_response = {}
 
 		# Parse POST data into array
-		field_data = json.loads(request.body)
+		field_data = json.loads(request.body)	
 
-		# URL to send deploying data
-		request_url = job.instance_url + '/services/data/v' + str(settings.SALESFORCE_API_VERSION) + '.0/tooling/sobjects/CustomField/'
-		
-		# Set headers for POST request
-		headers = { 
-			'Accept': 'application/json',
-			'X-PrettyPrint': 1,
-			'Authorization': 'Bearer ' + job.access_token,
-			'Content-Type': 'application/json'
-		}
+		# Use Metadata API for Production deployment
+		if job.environment == 'Production':
 
-		try:
+			# Instantiate the metadata API
+			metadata_client = Client('http://fieldcreator.herokuapp.com/static/metadata-' + str(settings.SALESFORCE_API_VERSION) + '.xml')
+			metadata_url = job.instance_url + '/services/Soap/m/' + str(settings.SALESFORCE_API_VERSION) + '.0/' + job.org_id
+			session_header = metadata_client.factory.create("SessionHeader")
+			session_header.sessionId = job.access_token
+			metadata_client.set_options(location=metadata_url, soapheaders=session_header)
 
-			# Set data (the field to deploy)
-			data = {
-				'Id': None,
-				'FullName': object_name + '.' + field_data['name'],
-				'Metadata': build_metadata_for_field(field_data)
+			# Build the field metadata
+			field_metadata = build_metadata_for_field(field_data, metadata_client=metadata_client)
+
+			# Deploy the field
+			result = metadata_client.service.updateMetadata([field_metadata])
+
+		else:
+
+			# URL to send deploying data
+			request_url = job.instance_url + '/services/data/v' + str(settings.SALESFORCE_API_VERSION) + '.0/tooling/sobjects/CustomField/'
+			
+			# Set headers for POST request
+			headers = { 
+				'Accept': 'application/json',
+				'X-PrettyPrint': 1,
+				'Authorization': 'Bearer ' + job.access_token,
+				'Content-Type': 'application/json'
 			}
 
-			create_error_log('Data Payload Debug', data)
+			try:
 
-		except Exception as ex:
+				# Set data (the field to deploy)
+				data = {
+					'Id': None,
+					'FullName': object_name + '.' + field_data['name'],
+					'Metadata': build_metadata_for_field(field_data)
+				}
 
-			page_response = {
-				'success': False,
-				'errorCode': 'Error building field metadata',
-				'message': ex
-			}
+				create_error_log('Data Payload Debug', data)
 
-			create_error_log('Data Payload Debug', traceback.format_exc())
+			except Exception as ex:
 
+				page_response = {
+					'success': False,
+					'errorCode': 'Error building field metadata',
+					'message': ex
+				}
+
+				create_error_log('Data Payload Debug', traceback.format_exc())
+
+				return HttpResponse(
+					json.dumps(page_response), 
+					content_type = 'application/json'
+				)
+
+			# Make RESTful POST
+			try:
+
+				r = requests.post(request_url, headers=headers, data=json.dumps(data))
+				page_response = r.json()
+
+			except Exception as ex:
+
+				page_response = {
+					'success': False,
+					'errorCode': 'Error connecting to Tooling API',
+					'message': ex
+				}
+
+				create_error_log('Deploy Field Error', traceback.format_exc())
+
+			# Return the POST response
 			return HttpResponse(
 				json.dumps(page_response), 
 				content_type = 'application/json'
 			)
-
-		# Make RESTful POST
-		try:
-
-			r = requests.post(request_url, headers = headers, data = json.dumps(data))
-			page_response = r.json()
-
-		except Exception as ex:
-
-			page_response = {
-				'success': False,
-				'errorCode': 'Error connecting to Tooling API',
-				'message': ex
-			}
-
-			create_error_log('Deploy Field Error', traceback.format_exc())
-
-		# Return the POST response
-		return HttpResponse(
-			json.dumps(page_response), 
-			content_type = 'application/json'
-		)
 
 	# No POST method found - return error
 	else:
@@ -420,6 +439,7 @@ def deploy_field(request, job_id, object_name):
 			json.dumps({'error': 'No POST message.'}), 
 			content_type = 'application/json'
 		)
+
 
 def deploy_profiles(request, job_id, object_name):
 	"""
