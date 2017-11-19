@@ -86,11 +86,11 @@ def build_metadata_for_field_tooling(field_data):
 		metadata['unique'] = field_data['uniqueSetting']
 
 	elif field_type == 'Picklist':
-		metadata['picklist'] = build_picklist_values(field_data)
+		metadata['picklist'] = build_picklist_values_tooling(field_data)
 
 	elif field_type == 'MultiselectPicklist':
 		metadata['visibleLines'] = field_data['vislines']
-		metadata['picklist'] = build_picklist_values(field_data)
+		metadata['picklist'] = build_picklist_values_tooling(field_data)
 
 	elif field_type == 'Text':
 		if field_data['default']:
@@ -195,11 +195,11 @@ def build_metadata_for_field_metadata(field_data, metadata_client):
 		new_field.unique = field_data['uniqueSetting']
 
 	elif field_type == 'Picklist':
-		new_field.valueSet = build_picklist_values(field_data)
+		new_field.valueSet.valueSetDefinition = build_picklist_values_metadata(field_data, metadata_client)
 
 	elif field_type == 'MultiselectPicklist':
 		new_field.visibleLines = field_data['vislines']
-		new_field.valueSet = build_picklist_values(field_data)
+		new_field.valueSet.valueSetDefinition = build_picklist_values_metadata(field_data, metadata_client)
 
 	elif field_type == 'Text':
 		if field_data['default']:
@@ -228,7 +228,7 @@ def build_metadata_for_field_metadata(field_data, metadata_client):
 	return new_field
 
 
-def build_picklist_values(field_data):
+def build_picklist_values_tooling(field_data):
 	"""
 		Method to build picklist JSON from page
 	"""
@@ -252,7 +252,6 @@ def build_picklist_values(field_data):
 
 			# If value isn't blank or null, add to array
 			if value:
-
 				picklist_values_list.append(value)
 
 		# Determine first value for the loop
@@ -284,6 +283,47 @@ def build_picklist_values(field_data):
 
 	return picklist
 
+
+
+def build_picklist_values_metadata(field_data, metadata_client):
+	"""
+	Build the valueSet metadata for picklist fields
+	"""
+
+	# Create the value set
+	value_set = metadata_client.factory.create("ValueSetValuesDefinition")
+	value_set.value = []
+
+	# The array of valeus to create picklist values for
+	picklist_values_list = []
+
+	# Split string for new lines
+	for value in field_data['picklistvalues'].split('\n'):
+
+		# Trim any whitesapce
+		value = value.strip()
+
+		# If value isn't blank or null, add to array
+		if value:
+			picklist_values_list.append(value)
+
+	# Determine first value for the loop
+	first_value = True
+
+	for picklist in picklist_values_list:
+
+		picklist_value = metadata_client.factory.create("CustomValue")
+		picklist_value.fullName = picklist
+		picklist_value.label = picklist
+		picklist_value.default = True if first_value and field_data['firstvaluedefault'] else False # If first value and first value default is checked
+
+		# Add to the value list
+		value_set.value.append(picklist_value)
+
+		# Remove the first value boolean
+		first_value = False
+
+	return value_set
 
 def create_error_log(name, error):
 	"""
