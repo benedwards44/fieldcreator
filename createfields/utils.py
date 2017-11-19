@@ -292,6 +292,7 @@ def build_picklist_values_metadata(field_data, metadata_client):
 
 	# Create the value set
 	value_set = metadata_client.factory.create("ValueSetValuesDefinition")
+	value_set.sorted = field_data.get('sortalpha', False)
 	value_set.value = []
 
 	# The array of valeus to create picklist values for
