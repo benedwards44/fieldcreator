@@ -344,7 +344,7 @@ def deploy_field(request, job_id, object_name):
 		AJAX endpoint to deploy a field. Fields are deployed one-by-one
 	"""
 
-	job = get_object_or_404(Job, random_id = job_id)
+	job = get_object_or_404(Job, random_id=job_id)
 
 	# If POST request made
 	if request.method == 'POST':
@@ -367,9 +367,49 @@ def deploy_field(request, job_id, object_name):
 
 			# Build the field metadata
 			field_metadata = build_metadata_for_field(field_data, metadata_client=metadata_client)
+			field_metadata.fullName = object_name + '.' + field_data.get('Name')
 
 			# Deploy the field
-			result = metadata_client.service.updateMetadata([field_metadata])
+			try:
+
+				result = metadata_client.service.createMetadata([field_metadata])
+
+				if result[0].success:
+
+					page_response = {
+						'success': True,
+						'errorCode': None,
+						'message': 'Successfully created field.'
+					}
+
+				else:
+
+					page_response = {
+						'success': False,
+						'errorCode': result[0].errors[0].statusCode,
+						'message': result[0].errors[0].message
+					}
+
+				# Return the POST response
+				return HttpResponse(
+					json.dumps(page_response), 
+					content_type = 'application/json'
+				)
+
+			except Exception as ex:
+
+				page_response = {
+					'success': False,
+					'errorCode': 'Error building field metadata',
+					'message': ex
+				}
+
+				create_error_log('Data Payload Debug', traceback.format_exc())
+
+				return HttpResponse(
+					json.dumps(page_response), 
+					content_type = 'application/json'
+				)
 
 		else:
 

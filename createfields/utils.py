@@ -124,7 +124,20 @@ def build_metadata_for_field_metadata(field_data, metadata_client):
 	Build the field metadata for the Metadata API
 	"""
 
+	field_type = field_data['type']
+
+	# Instantiate the new field
 	new_field = metadata_client.factory.create("CustomField")
+
+	# Clear out all the fields that cause deployment issues when resolved to blank strings
+	# So explicity need to be set to None/Null
+	new_field.deleteConstraint = None
+	new_field.fieldManageability = None
+	new_field.formulaTreatBlanksAs = None
+	new_field.maskChar = None
+	new_field.maskType = None
+	new_field.securityClassification = None
+	new_field.summaryOperation = None
 
 	# Set field values
 	new_field.inlineHelpText = field_data.get('helptext')
@@ -132,9 +145,85 @@ def build_metadata_for_field_metadata(field_data, metadata_client):
 	new_field.label = field_data.get('label')
 	new_field.type = field_data.get('type')
 
-	# Set defaults
-	new_field.deleteConstraint = 'SetNull'
-	new_field.fieldManageability = None
+	if field_type == 'Checkbox':
+		new_field.defaultValue = True if field_data['checkboxdefault'] == 'checked' else False
+
+	elif field_type == 'Currency':
+		if field_data['default']:
+			new_field.defaultValue = field_data['default']
+		new_field.precision = int(field_data['precision']) + int(field_data['decimal'])
+		new_field.scale = int(field_data['decimal'])
+		new_field.required = field_data['required']
+
+		
+	elif field_type == 'Date' or field_type == 'DateTime' or field_type == 'Phone' or field_type == 'TextArea' or field_type == 'Url':
+		if field_data['default']:
+			new_field.defaultValue = field_data['default']
+		new_field.required = field_data['required']
+		
+	elif field_type == 'Email':
+		if field_data['default']:
+			new_field.default = field_data['default']
+		new_field.externalId = field_data['external']
+		new_field.required = field_data['required']
+		new_field.unique = field_data['uniqueSetting']
+		
+	elif field_type == 'Location':
+		new_field.displayLocationInDecimal = True if field_data['geodisplay'] == 'decimal' else False
+		new_field.required = field_data['required']
+		new_field.scale = int(field_data['decimal'])  if field_data['decimal'] else None
+
+	elif field_type == 'Number':
+
+		if field_data['default']:
+			new_field.default = field_data['default']
+
+		new_field.externalId = field_data['external']
+		new_field.precision = int(field_data['precision']) + int(field_data['decimal'])
+		new_field.scale = int(field_data['decimal'])
+		new_field.required = field_data['required']
+		new_field.unique = field_data['uniqueSetting']
+
+	elif field_type == 'Percent':
+
+		if field_data['default']:
+			new_field.default = field_data['default']
+
+		new_field.precision = int(field_data['precision']) + int(field_data['decimal'])
+		new_field.scale = int(field_data['decimal'])
+		new_field.required = field_data['required']
+		new_field.unique = field_data['uniqueSetting']
+
+	elif field_type == 'Picklist':
+		new_field.valueSet = build_picklist_values(field_data)
+
+	elif field_type == 'MultiselectPicklist':
+		new_field.visibleLines = field_data['vislines']
+		new_field.valueSet = build_picklist_values(field_data)
+
+	elif field_type == 'Text':
+		if field_data['default']:
+			new_field.defaultValue = field_data['default']
+		new_field.length = field_data['length']
+		new_field.externalId = field_data['external']
+		new_field.required = field_data['required']
+		new_field.unique = field_data['uniqueSetting']
+
+	elif field_type == 'LongTextArea':
+		if field_data['default']:
+			new_field.defaultValue = field_data['default']
+		new_field.length = field_data['length']
+		new_field.visibleLines = field_data['vislines']
+
+	elif field_type == 'Html':
+		new_field.length = field_data['length']
+		new_field.visibleLines = field_data['vislines']
+
+	elif field_type == 'EncryptedText':
+		new_field.length = field_data['length']
+		new_field.required = field_data['required']
+		new_field.maskChar = field_data['maskchar']
+		new_field.maskType = field_data['masktype']
 
 	return new_field
 
