@@ -86,11 +86,22 @@ def build_metadata_for_field_tooling(field_data):
 		metadata['unique'] = field_data['uniqueSetting']
 
 	elif field_type == 'Picklist':
-		metadata['picklist'] = build_picklist_values_tooling(field_data)
+		metadata['valueSet'] = {
+			'valueSetDefinition': {
+				'sorted': field_data.get('sortalpha', False),
+				'value': build_picklist_values_tooling(field_data)
+			}
+		}
 
 	elif field_type == 'MultiselectPicklist':
+		metadata['valueSet'] = {
+			'valueSetDefinition': {
+				'sorted': field_data.get('sortalpha', False),
+				'value': build_picklist_values_tooling(field_data)
+			}
+		}
 		metadata['visibleLines'] = field_data['vislines']
-		metadata['picklist'] = build_picklist_values_tooling(field_data)
+
 
 	elif field_type == 'Text':
 		if field_data['default']:
@@ -239,8 +250,8 @@ def build_picklist_values_tooling(field_data):
 	# start empty array
 	picklist_values_list = []
 
-	# JSON list
-	picklist_json_list = []
+	# The array of values to return
+	values = []
 
 	try:
 		
@@ -261,27 +272,23 @@ def build_picklist_values_tooling(field_data):
 		for picklist in picklist_values_list:
 
 			# Build picklist value
-			json_dict = {
+			value_dict = {
+				'label': picklist,
 				'valueName': picklist,
 				'default': True if first_value and field_data['firstvaluedefault'] else False # If first value and first value default is checked
 			} 
 
 			# Add dict to list
-			picklist_json_list.append(json_dict)	
+			values.append(value_dict)	
 
 			# Remove the first value boolean
 			first_value = False
 
 	except Exception as ex:
 		# TODO - error handling
-		create_error_log('Picklist Error', ex)		
+		create_error_log('Picklist Error', ex)
 
-	picklist = {
-		'picklistValues': picklist_json_list,
-		'sorted': field_data['sortalpha']
-	}
-
-	return picklist
+	return values
 
 
 
