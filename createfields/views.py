@@ -70,10 +70,10 @@ def oauth_response(request):
 		access_token = ''
 		instance_url = ''
 
-		if 'Production' in environment:
-			login_url = 'https://login.salesforce.com'
-		else:
+		if 'Sandbox' in environment:
 			login_url = 'https://test.salesforce.com'
+		else:
+			login_url = 'https://login.salesforce.com'
 		
 		# Log in to REST API to obtain access token
 		r = requests.post(login_url + '/services/oauth2/token', headers={ 'content-type':'application/x-www-form-urlencoded'}, data={'grant_type':'authorization_code','client_id': settings.SALESFORCE_CONSUMER_KEY,'client_secret':settings.SALESFORCE_CONSUMER_SECRET,'redirect_uri': settings.SALESFORCE_REDIRECT_URI,'code': oauth_code})
