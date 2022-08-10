@@ -15,7 +15,7 @@ sys.setdefaultencoding("utf-8")
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fieldcreator.settings')
 
-app = Celery('tasks', broker=os.environ.get('REDISTOGO_URL', 'redis://localhost'))
+app = Celery('tasks', broker=os.environ.get('REDIS_URL', 'redis://localhost'))
 
 from createfields.models import Job, CustomObject, PageLayout, Profile, ErrorLog
 from createfields.utils import create_error_log, chunks
