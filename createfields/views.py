@@ -275,7 +275,7 @@ def get_profiles(request, job_id):
 		})
 
 	# Return list to page
-	return JsonResponse(profile_list)
+	return JsonResponse(profile_list, safe=False)
 
 
 def get_layouts(request, job_id, object_name):
@@ -297,7 +297,7 @@ def get_layouts(request, job_id, object_name):
 
 			layout_list.append({'name': layout.name})
 
-		return JsonResponse(layout_list)
+		return JsonResponse(layout_list, safe=False)
 
 	# Otherwise we need to query for layouts
 	else:
@@ -333,7 +333,7 @@ def get_layouts(request, job_id, object_name):
 				new_layout.save()
 
 			# Return the layout list for the page
-			return JsonResponse(layout_list)
+			return JsonResponse(layout_list, safe=False)
 
 		# Error making REST call
 		else:
