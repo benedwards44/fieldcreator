@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.index, name='index'),
     url(r'^oauth_response/$', views.oauth_response, name='oauth_response'),
-    url(r'^create_fields/(?P<job_id>[0-9A-Za-z_\-]+)/$', views.create_field, name='create_fields'),
+    url(r'^create_fields/(?P<job_id>[0-9A-Za-z_\-]+)/$', views.create_fields, name='create_fields'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^loading/(?P<job_id>[0-9A-Za-z_\-]+)/$', views.loading, name='loading'),
     url(r'^job_status/(?P<job_id>[0-9A-Za-z_\-]+)/$', views.job_status, name='job_status'),

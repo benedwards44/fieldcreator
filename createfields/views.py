@@ -152,7 +152,7 @@ def oauth_response(request):
 				job.save()
 
 				# Start downloading metadata using async task
-				get_metadata.delay(job)
+				get_metadata.delay(job.id)
 
 				# Return to loading page. This will cycle an AJAX request to check when job is finished
 				return HttpResponseRedirect('/loading/' + str(job.random_id))
@@ -197,7 +197,7 @@ def create_fields(request, job_id):
 		job.sorted_profiles().delete()
 
 		# Start downloading metadata using async task
-		get_metadata.delay(job)
+		get_metadata.delay(job.id)
 
 		# Determine URL for redirection
 		return_url = '/loading/' + str(job.random_id) + '/'
@@ -571,7 +571,7 @@ def auth_details(request):
 			job.save()
 
 			# Run job
-			get_metadata.delay(job)
+			get_metadata.delay(job.id)
 
 			# Build response 
 			response_data = {
