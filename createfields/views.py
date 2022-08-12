@@ -409,7 +409,10 @@ def deploy_field(request, job_id, object_name):
 					'message': ex
 				}
 
-				create_error_log('Data Payload Debug', traceback.format_exc())
+				create_error_log(
+					'Data Payload Debug', 
+					traceback.format_exc()
+				)
 
 				return JsonResponse(page_response)
 
@@ -466,7 +469,7 @@ def deploy_field(request, job_id, object_name):
 				create_error_log('Deploy Field Error', traceback.format_exc())
 
 			# Return the POST response
-			return JsonResponse(page_response)
+			return JsonResponse(page_response, safe=False)
 
 	# No POST method found - return error
 	else:
