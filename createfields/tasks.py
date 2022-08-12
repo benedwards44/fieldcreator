@@ -17,14 +17,19 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fieldcreator.settings')
 
 app = Celery('tasks', broker=os.environ.get('REDIS_URL', 'redis://localhost'))
 
+import django
+django.setup()
+
 from createfields.models import Job, CustomObject, PageLayout, Profile, ErrorLog
 from createfields.utils import create_error_log, chunks
 
 @app.task
-def get_metadata(job): 
+def get_metadata(job_id): 
 	"""
 		Async task to download list of objects and profiles
 	"""
+
+	job = Job.objects.get(pk=job_id)
 	
 	job.status = 'Downloading Metadata'
 	job.save()
@@ -109,10 +114,12 @@ def get_metadata(job):
 
 
 @app.task
-def deploy_profiles_async(job, object_name, all_fields):
+def deploy_profiles_async(job_id, object_name, all_fields):
 	"""
 		Async task to deploy profiles. This takes longer so is done silently
 	"""
+
+	job = Job.objects.get(pk=job_id)
 
 	# Deploy layouts - Have to use the Metadata SOAP API because the Tooling REST API wouldn't bloody work!
 

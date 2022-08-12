@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
@@ -46,7 +46,8 @@ def index(request):
 	else:
 		login_form = LoginForm()
 
-	return render_to_response('index.html', RequestContext(request,{'login_form': login_form}))
+	return render(request, 'index.html', {'login_form': login_form })
+
 
 def oauth_response(request):
 	"""
@@ -156,8 +157,18 @@ def oauth_response(request):
 				# Return to loading page. This will cycle an AJAX request to check when job is finished
 				return HttpResponseRedirect('/loading/' + str(job.random_id))
 
-	return render_to_response('oauth_response.html', RequestContext(request,{'error': error_exists, 'error_message': error_message, 'username': username, 'org_name': org_name, 'login_form': login_form}))
-
+	return render(
+        request, 
+        'oauth_response.html', 
+        {
+            'error': error_exists, 
+            'error_message': error_message, 
+            'username': username, 
+            'org_name': org_name, 
+            'login_form': login_form
+		}
+	)
+        
 
 def logout(request):
 	"""
@@ -167,7 +178,7 @@ def logout(request):
 	# Determine logout url based on environment
 	instance_prefix = request.GET.get('instance_prefix')
 		
-	return render_to_response('logout.html', RequestContext(request, {'instance_prefix': instance_prefix}))
+	return render(request, 'logout.html', { 'instance_prefix': instance_prefix })
 
 
 def create_fields(request, job_id):
@@ -201,7 +212,7 @@ def create_fields(request, job_id):
 	# Else GET request, render page.
 	else:
 
-		return render_to_response('create_fields.html', RequestContext(request, {'job': job}))
+		return render(request, 'create_fields.html', { 'job': job })
 
 
 def job_status(request, job_id):
@@ -240,7 +251,7 @@ def loading(request, job_id):
 
 	else:
 		
-		return render_to_response('loading.html', RequestContext(request, {'job': job}))	
+		return render(request, 'loading.html', { 'job': job })
 
 
 def get_profiles(request, job_id):
