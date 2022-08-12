@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from createfields.models import Job, CustomObject, PageLayout, Profile, ErrorLog
 from createfields.forms import LoginForm
@@ -228,7 +228,7 @@ def job_status(request, job_id):
 		'error': job.error
 	}
 
-	return HttpResponse(json.dumps(response_data), content_type = 'application/json')
+	return JsonResponse(response_data)
 
 
 def loading(request, job_id):
@@ -275,10 +275,7 @@ def get_profiles(request, job_id):
 		})
 
 	# Return list to page
-	return HttpResponse(
-		json.dumps(profile_list), 
-		content_type = 'application/json'
-	)
+	return JsonResponse(profile_list)
 
 
 def get_layouts(request, job_id, object_name):
@@ -300,7 +297,7 @@ def get_layouts(request, job_id, object_name):
 
 			layout_list.append({'name': layout.name})
 
-		return HttpResponse(json.dumps(layout_list), content_type = 'application/json')
+		return JsonResponse(layout_list)
 
 	# Otherwise we need to query for layouts
 	else:
@@ -336,7 +333,7 @@ def get_layouts(request, job_id, object_name):
 				new_layout.save()
 
 			# Return the layout list for the page
-			return HttpResponse(json.dumps(layout_list), content_type = 'application/json')
+			return JsonResponse(layout_list)
 
 		# Error making REST call
 		else:
@@ -347,7 +344,7 @@ def get_layouts(request, job_id, object_name):
 				'message': request.json()[0]['message']
 			}
 
-			return HttpResponse(json.dumps(response_data), content_type = 'application/json')
+			return JsonResponse(response_data)
 
 
 def deploy_field(request, job_id, object_name):
@@ -402,10 +399,7 @@ def deploy_field(request, job_id, object_name):
 					}
 
 				# Return the POST response
-				return HttpResponse(
-					json.dumps(page_response), 
-					content_type = 'application/json'
-				)
+				return JsonResponse(page_response)
 
 			except Exception as ex:
 
@@ -417,10 +411,7 @@ def deploy_field(request, job_id, object_name):
 
 				create_error_log('Data Payload Debug', traceback.format_exc())
 
-				return HttpResponse(
-					json.dumps(page_response), 
-					content_type = 'application/json'
-				)
+				return JsonResponse(page_response)
 
 		else:
 
@@ -456,10 +447,7 @@ def deploy_field(request, job_id, object_name):
 
 				create_error_log('Data Payload Debug', traceback.format_exc())
 
-				return HttpResponse(
-					json.dumps(page_response), 
-					content_type = 'application/json'
-				)
+				return JsonResponse(page_response)
 
 			# Make RESTful POST
 			try:
@@ -478,18 +466,12 @@ def deploy_field(request, job_id, object_name):
 				create_error_log('Deploy Field Error', traceback.format_exc())
 
 			# Return the POST response
-			return HttpResponse(
-				json.dumps(page_response), 
-				content_type = 'application/json'
-			)
+			return JsonResponse(page_response)
 
 	# No POST method found - return error
 	else:
 
-		return HttpResponse(
-			json.dumps({'error': 'No POST message.'}), 
-			content_type = 'application/json'
-		)
+		return JsonResponse({'error': 'No POST message.'})
 
 
 def deploy_profiles(request, job_id, object_name):
@@ -522,21 +504,15 @@ def deploy_profiles(request, job_id, object_name):
 
 				create_error_log('Delay Profile Deployment Error', traceback.format_exc())
 
-		return HttpResponse(
-			json.dumps({
-				'success': True,
-				'message': 'Successfully start profile job'
-			}), 
-			content_type = 'application/json'
-		)
+		return JsonResponse({
+			'success': True,
+			'message': 'Successfully start profile job'
+		})
 
 		# No POST method found - return error
 	else:
 
-		return HttpResponse(
-			json.dumps({'error': 'No POST message.'}), 
-			content_type = 'application/json'
-		)
+		return JsonResponse({'error': 'No POST message.'})
 
 @csrf_exempt
 def auth_details(request):
@@ -589,4 +565,4 @@ def auth_details(request):
 			'error_text': str(error)
 		}
 	
-	return HttpResponse(json.dumps(response_data), content_type = 'application/json')
+	return JsonResponse(response_data)
