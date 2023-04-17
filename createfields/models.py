@@ -25,7 +25,7 @@ class Job(models.Model):
 		return '%s' % (self.random_id)
 
 class CustomObject(models.Model):
-	job = models.ForeignKey(Job)
+	job = models.ForeignKey(Job, on_delete=models.deletion.CASCADE)
 	label = models.CharField(max_length=255, blank=True, null=True)
 	name = models.CharField(max_length=255, blank=True, null=True)
 
@@ -36,8 +36,8 @@ class CustomObject(models.Model):
 		return self.pagelayout_set.all().order_by('name')
 
 class PageLayout(models.Model):
-	job = models.ForeignKey(Job)
-	salesforce_object = models.ForeignKey(CustomObject)
+	job = models.ForeignKey(Job, on_delete=models.deletion.CASCADE)
+	salesforce_object = models.ForeignKey(CustomObject, on_delete=models.deletion.CASCADE)
 	salesforce_id = models.CharField(max_length=255, blank=True, null=True)
 	name = models.CharField(max_length=255, blank=True, null=True)
 
@@ -45,7 +45,7 @@ class PageLayout(models.Model):
 		return '%s' % (self.name)
 
 class Profile(models.Model):
-	job = models.ForeignKey(Job)
+	job = models.ForeignKey(Job, on_delete=models.deletion.CASCADE)
 	salesforce_id = models.CharField(max_length=255, blank=True, null=True)
 	name = models.CharField(max_length=255, blank=True, null=True)
 	fullName = models.CharField(max_length=255, blank=True, null=True)

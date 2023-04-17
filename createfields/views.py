@@ -16,9 +16,6 @@ from time import sleep
 import sys
 import traceback
 
-reload(sys)
-sys.setdefaultencoding("utf-8")
-
 def index(request):
 	"""
 		Controller for the index/landing page.

@@ -1,5 +1,6 @@
 import os
-import urlparse
+import dj_database_url
+from pathlib import Path
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -7,11 +8,15 @@ PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+IS_HEROKU = "DYNO" in os.environ
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'ABC123')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', '0') == '1'
+DEBUG = os.environ.get('DEBUG') == '1'
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = DEBUG
 
@@ -19,7 +24,9 @@ ADMINS = (
     ('Ben Edwards', 'ben@edwards.nz'),
 )
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+if IS_HEROKU:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -52,11 +59,19 @@ WSGI_APPLICATION = 'fieldcreator.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-import dj_database_url
+MAX_CONN_AGE = 600
 
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+if "DATABASE_URL" in os.environ:
+    # Configure Django for DATABASE_URL environment variable.
+    DATABASES["default"] = dj_database_url.config(
+        conn_max_age=MAX_CONN_AGE, ssl_require=True)
 
 # Celery settings
 BROKER_POOL_LIMIT = 1
@@ -73,7 +88,9 @@ USE_TZ = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(os.path.dirname(__file__), "templates")],
+        'DIRS': [
+            BASE_DIR / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,16 +99,15 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'debug': DEBUG,
         },
     },
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_PATH, 'static'),
-)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+STATIC_URL = 'static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 SALESFORCE_CONSUMER_KEY = os.environ.get('SALESFORCE_CONSUMER_KEY')
@@ -106,39 +122,4 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR + '/debug.log',
-        },
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': [
-                #'mail_admins', 
-                'file',
-            ],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
-}
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

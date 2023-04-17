@@ -1,20 +1,20 @@
-from django.conf.urls import url, include
-from django.views.generic import TemplateView, RedirectView
+from django.urls import path
+from django.views.generic import TemplateView
 from django.contrib import admin
 
 from createfields import views
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.index, name='index'),
-    url(r'^oauth_response/$', views.oauth_response, name='oauth_response'),
-    url(r'^create_fields/(?P<job_id>[0-9A-Za-z_\-]+)/$', views.create_fields, name='create_fields'),
-    url(r'^logout/$', views.logout, name='logout'),
-    url(r'^loading/(?P<job_id>[0-9A-Za-z_\-]+)/$', views.loading, name='loading'),
-    url(r'^job_status/(?P<job_id>[0-9A-Za-z_\-]+)/$', views.job_status, name='job_status'),
-    url(r'^get_layouts/(?P<job_id>[0-9A-Za-z_\-]+)/(?P<object_name>[0-9A-Za-z_\-]+)/$', views.get_layouts, name='get_layouts'),
-    url(r'^get_profiles/(?P<job_id>[0-9A-Za-z_\-]+)/$', views.get_profiles, name='get_profiles'),
-    url(r'^deploy_field/(?P<job_id>[0-9A-Za-z_\-]+)/(?P<object_name>[0-9A-Za-z_\-]+)/$', views.deploy_field, name='deploy_field'),
-    url(r'^deploy_profiles/(?P<job_id>[0-9A-Za-z_\-]+)/(?P<object_name>[0-9A-Za-z_\-]+)/$', views.deploy_profiles, name='deploy_profiles'),
-    url(r'^auth_details/$', views.auth_details, name='auth_details'),
+   path('', views.index, name='index'),
+   path('admin/', admin.site.urls),
+   path('oauth_response/', views.oauth_response, name='oauth_response'),
+   path('create_fields/<str:job_id>/', views.create_fields, name='create_fields'),
+   path('logout/', views.logout, name='logout'),
+   path('loading/<str:job_id>/', views.loading, name='loading'),
+   path('job_status/<str:job_id>/', views.job_status, name='job_status'),
+   path('get_layouts/<str:job_id>/<str:object_name>/', views.get_layouts, name='get_layouts'),
+   path('get_profiles/<str:job_id>/', views.get_profiles, name='get_profiles'),
+   path('deploy_field/<str:job_id>/<str:object_name>/', views.deploy_field, name='deploy_field'),
+   path('deploy_profiles/<str:job_id>/<str:object_name>/', views.deploy_profiles, name='deploy_profiles'),
+   path('auth_details/', views.auth_details, name='auth_details'),
 ]
