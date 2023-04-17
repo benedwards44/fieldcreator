@@ -63,12 +63,12 @@ def get_metadata(job_id):
 		request_url = job.instance_url + '/services/data/v' + str(settings.SALESFORCE_API_VERSION) + '.0/'
 		headers = { 
 			'Accept': 'application/json',
-			'X-PrettyPrint': 1,
+			'X-PrettyPrint': '1',
 			'Authorization': 'Bearer ' + job.access_token
 		}
 
 		# Query for all objects
-		for record in requests.get(request_url + 'sobjects', headers = headers).json()['sobjects']:
+		for record in requests.get(request_url + 'sobjects', headers=headers).json()['sobjects']:
 
 			if record['custom'] or record['name'] in supported_standard_objects:
 
