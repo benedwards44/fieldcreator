@@ -1,5 +1,5 @@
 """
-WSGI config for edwardsandconnect project.
+WSGI config for fieldcreator project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

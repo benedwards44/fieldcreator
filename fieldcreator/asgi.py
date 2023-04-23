@@ -1,5 +1,5 @@
 """
-ASGI config for edwardsandconnect project.
+ASGI config for fieldcreator project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
