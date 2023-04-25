@@ -305,7 +305,7 @@ def get_layouts(request, job_id, object_name):
 		# Set headers for callout
 		headers = { 
 			'Accept': 'application/json',
-			'X-PrettyPrint': 1,
+			'X-PrettyPrint': '1',
 			'Authorization': 'Bearer ' + job.access_token
 		}
 
@@ -421,7 +421,7 @@ def deploy_field(request, job_id, object_name):
 			# Set headers for POST request
 			headers = { 
 				'Accept': 'application/json',
-				'X-PrettyPrint': 1,
+				'X-PrettyPrint': '1',
 				'Authorization': 'Bearer ' + job.access_token,
 				'Content-Type': 'application/json'
 			}
