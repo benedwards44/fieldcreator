@@ -364,7 +364,7 @@ def deploy_field(request, job_id, object_name):
 		if job.environment == 'Production':
 
 			# Instantiate the metadata API
-			metadata_client = Client('http://fieldcreator.herokuapp.com/static/metadata-' + str(settings.SALESFORCE_API_VERSION) + '.xml')
+			metadata_client = Client('http://fieldcreator.cloudtoolkit.co/static/metadata.wsdl.xml')
 			metadata_url = job.instance_url + '/services/Soap/m/' + str(settings.SALESFORCE_API_VERSION) + '.0/' + job.org_id
 			session_header = metadata_client.factory.create("SessionHeader")
 			session_header.sessionId = job.access_token
@@ -551,7 +551,7 @@ def auth_details(request):
 
 			# Build response 
 			response_data = {
-				'job_url': 'https://fieldcreator.herokuapp.com/loading/' + str(job.random_id) + '/?noheader=1',
+				'job_url': 'https://fieldcreator.cloudtoolkit.co/loading/' + str(job.random_id) + '/?noheader=1',
 				'status': 'Success',
 				'success': True
 			}

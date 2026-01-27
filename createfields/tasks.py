@@ -1,25 +1,14 @@
 from __future__ import absolute_import
-from celery import Celery
 from django.conf import settings
-from zipfile import ZipFile
 from suds.client import Client
-from base64 import b64encode, b64decode
 import requests
-import os
 import datetime
-import sys
 import traceback
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fieldcreator.settings')
-app = Celery('tasks', broker=os.environ.get('REDIS_URL', 'redis://localhost'))
-
-import django
-django.setup()
-
-from createfields.models import Job, CustomObject, PageLayout, Profile, ErrorLog
+from celery import shared_task
+from createfields.models import Job, CustomObject, Profile
 from createfields.utils import create_error_log, chunks
 
-@app.task
+@shared_task
 def get_metadata(job_id): 
 	"""
 		Async task to download list of objects and profiles
@@ -109,7 +98,7 @@ def get_metadata(job_id):
 
 
 
-@app.task
+@shared_task
 def deploy_profiles_async(job_id, object_name, all_fields):
 	"""
 		Async task to deploy profiles. This takes longer so is done silently
@@ -124,7 +113,7 @@ def deploy_profiles_async(job_id, object_name, all_fields):
 	try:
 
 		# work with profiles
-		metadata_client = Client('http://fieldcreator.herokuapp.com/static/metadata-' + str(settings.SALESFORCE_API_VERSION) + '.xml')
+		metadata_client = Client('http://fieldcreator.cloudtoolkit.co/static/metadata.wsdl.xml')
 		metadata_url = job.instance_url + '/services/Soap/m/' + str(settings.SALESFORCE_API_VERSION) + '.0/' + job.org_id
 		session_header = metadata_client.factory.create("SessionHeader")
 		session_header.sessionId = job.access_token
