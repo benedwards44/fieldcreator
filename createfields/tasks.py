@@ -4,9 +4,11 @@ from suds.client import Client
 import requests
 import datetime
 import traceback
+from django.utils import timezone
 from celery import shared_task
-from createfields.models import Job, CustomObject, Profile
+from createfields.models import Job, CustomObject, Profile, ErrorLog
 from createfields.utils import create_error_log, chunks
+
 
 @shared_task
 def get_metadata(job_id): 
@@ -187,3 +189,19 @@ def deploy_profiles_async(job_id, object_name, all_fields):
 
 		create_error_log('Deploy Profiles Error', str(traceback.format_exc()))
 
+@shared_task
+def job_archival():
+	"""
+	Deletes old jobs to keep the database clean
+	"""
+
+	# Datetime for 1 day ago
+	one_day_ago = timezone.now() - datetime.timedelta(hours=24)
+
+	# Delete jobs over 24 hours old
+	jobs = Job.objects.filter(created_date__lt=one_day_ago)
+	jobs.delete()
+
+	# Delete logs over 24 hours old
+	logs = ErrorLog.objects.filter(created_date__lt=one_day_ago)
+	logs.delete()
